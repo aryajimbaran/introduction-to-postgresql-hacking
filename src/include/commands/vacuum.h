@@ -154,6 +154,7 @@ extern int	vacuum_freeze_min_age;
 extern int	vacuum_freeze_table_age;
 extern int	vacuum_multixact_freeze_min_age;
 extern int	vacuum_multixact_freeze_table_age;
+extern int	log_vacuum_progress_interval;
 
 
 /* in commands/vacuum.c */

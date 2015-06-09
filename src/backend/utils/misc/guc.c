@@ -2319,6 +2319,17 @@ static struct config_int ConfigureNamesInt[] =
 	},
 
 	{
+		{"log_vacuum_progress_interval", PGC_USERSET, LOGGING_WHAT,
+			gettext_noop("Frequency with which vacuum should report progress."),
+			NULL,
+			GUC_UNIT_MS
+		},
+		&log_vacuum_progress_interval,
+		0, 0, INT_MAX,
+		NULL, NULL, NULL
+	},
+
+	{
 		{"bgwriter_delay", PGC_SIGHUP, RESOURCES_BGWRITER,
 			gettext_noop("Background writer sleep time between rounds."),
 			NULL,

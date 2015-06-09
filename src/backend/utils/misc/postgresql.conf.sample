@@ -412,6 +412,7 @@
 #debug_print_plan = off
 #debug_pretty_print = on
 #log_checkpoints = off
+#log_vacuum_progress_interval = 0
 #log_connections = off
 #log_disconnections = off
 #log_duration = off

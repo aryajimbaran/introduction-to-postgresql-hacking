@@ -456,6 +456,7 @@ lazy_scan_heap(Relation onerel, LVRelStats *vacrelstats,
 	bool		skipping_all_visible_blocks;
 	xl_heap_freeze_tuple *frozen;
 	StringInfoData buf;
+	TimestampTz	last_progress_report_time = GetCurrentTimestamp();
 
 	pg_rusage_init(&ru0);
 
@@ -539,6 +540,20 @@ lazy_scan_heap(Relation onerel, LVRelStats *vacrelstats,
 		bool		all_visible;
 		bool		has_dead_tuples;
 		TransactionId visibility_cutoff_xid = InvalidTransactionId;
+
+		if (log_vacuum_progress_interval > 0)
+		{
+			TimestampTz	now = GetCurrentTimestamp();
+
+			if (TimestampDifferenceExceeds(last_progress_report_time, now,
+										   log_vacuum_progress_interval))
+			{
+				ereport(INFO,
+						(errmsg("vacuuming relation \"%s\" -- page %u of %u",
+						 relname, blkno, nblocks)));
+				last_progress_report_time = now;
+			}
+		}
 
 		if (blkno == next_not_all_visible_block)
 		{
