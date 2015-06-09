@@ -562,7 +562,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 /* ordinary key words in alphabetical order */
 %token <keyword> ABORT_P ABSOLUTE_P ACCESS ACTION ADD_P ADMIN AFTER
 	AGGREGATE ALL ALSO ALTER ALWAYS ANALYSE ANALYZE AND ANY ARRAY AS ASC
-	ASSERTION ASSIGNMENT ASYMMETRIC AT ATTRIBUTE AUTHORIZATION
+	ASSERTION ASSIGNMENT ASYMMETRIC AT ATTRIBUTE AUTHORISATION AUTHORIZATION
 
 	BACKWARD BEFORE BEGIN_P BETWEEN BIGINT BINARY BIT
 	BOOLEAN_P BOTH BY
@@ -1254,7 +1254,7 @@ DropGroupStmt:
  *****************************************************************************/
 
 CreateSchemaStmt:
-			CREATE SCHEMA OptSchemaName AUTHORIZATION RoleSpec OptSchemaEltList
+			CREATE SCHEMA OptSchemaName authorization_keyword RoleSpec OptSchemaEltList
 				{
 					CreateSchemaStmt *n = makeNode(CreateSchemaStmt);
 					/* One can omit the schema name or the authorization id. */
@@ -1274,7 +1274,7 @@ CreateSchemaStmt:
 					n->if_not_exists = false;
 					$$ = (Node *)n;
 				}
-			| CREATE SCHEMA IF_P NOT EXISTS OptSchemaName AUTHORIZATION RoleSpec OptSchemaEltList
+			| CREATE SCHEMA IF_P NOT EXISTS OptSchemaName authorization_keyword RoleSpec OptSchemaEltList
 				{
 					CreateSchemaStmt *n = makeNode(CreateSchemaStmt);
 					/* schema name can be omitted here, too */
@@ -1474,7 +1474,7 @@ set_rest_more:	/* Generic SET syntaxes: */
 					n->args = list_make1(makeStringConst($2, @2));
 					$$ = n;
 				}
-			| SESSION AUTHORIZATION NonReservedWord_or_Sconst
+			| SESSION authorization_keyword NonReservedWord_or_Sconst
 				{
 					VariableSetStmt *n = makeNode(VariableSetStmt);
 					n->kind = VAR_SET_VALUE;
@@ -1482,7 +1482,7 @@ set_rest_more:	/* Generic SET syntaxes: */
 					n->args = list_make1(makeStringConst($3, @3));
 					$$ = n;
 				}
-			| SESSION AUTHORIZATION DEFAULT
+			| SESSION authorization_keyword DEFAULT
 				{
 					VariableSetStmt *n = makeNode(VariableSetStmt);
 					n->kind = VAR_SET_DEFAULT;
@@ -1616,7 +1616,7 @@ reset_rest:
 					n->name = "transaction_isolation";
 					$$ = n;
 				}
-			| SESSION AUTHORIZATION
+			| SESSION authorization_keyword 
 				{
 					VariableSetStmt *n = makeNode(VariableSetStmt);
 					n->kind = VAR_RESET;
@@ -1673,7 +1673,7 @@ VariableShowStmt:
 					n->name = "transaction_isolation";
 					$$ = (Node *) n;
 				}
-			| SHOW SESSION AUTHORIZATION
+			| SHOW SESSION authorization_keyword
 				{
 					VariableShowStmt *n = makeNode(VariableShowStmt);
 					n->name = "session_authorization";
@@ -9264,6 +9264,11 @@ analyze_keyword:
 			| ANALYSE /* British */					{}
 		;
 
+authorization_keyword:
+			AUTHORIZATION							{}
+			| AUTHORISATION /* British */			{}
+		;
+
 opt_verbose:
 			VERBOSE									{ $$ = TRUE; }
 			| /*EMPTY*/								{ $$ = FALSE; }
@@ -13919,7 +13924,8 @@ col_name_keyword:
  * - thomas 2000-11-28
  */
 type_func_name_keyword:
-			  AUTHORIZATION
+			  AUTHORISATION
+			| AUTHORIZATION
 			| BINARY
 			| COLLATION
 			| CONCURRENTLY
