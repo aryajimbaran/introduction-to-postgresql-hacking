@@ -47,6 +47,7 @@
 #include "commands/schemacmds.h"
 #include "commands/seclabel.h"
 #include "commands/sequence.h"
+#include "commands/shutdown.h"
 #include "commands/tablecmds.h"
 #include "commands/tablespace.h"
 #include "commands/trigger.h"
@@ -661,6 +662,10 @@ standard_ProcessUtility(Node *parsetree,
 		case T_AlterSystemStmt:
 			PreventTransactionChain(isTopLevel, "ALTER SYSTEM");
 			AlterSystemSetConfigFile((AlterSystemStmt *) parsetree);
+			break;
+
+		case T_ShutdownStmt:
+			ExecShutdownStmt((ShutdownStmt *) parsetree);
 			break;
 
 		case T_VariableSetStmt:
@@ -2369,6 +2374,7 @@ CreateCommandTag(Node *parsetree)
 			break;
 
 		case T_AlterSystemStmt:
+		case T_ShutdownStmt:
 			tag = "ALTER SYSTEM";
 			break;
 
@@ -2952,6 +2958,10 @@ GetCommandLogLevel(Node *parsetree)
 			break;
 
 		case T_AlterSystemStmt:
+			lev = LOGSTMT_DDL;
+			break;
+
+		case T_ShutdownStmt:
 			lev = LOGSTMT_DDL;
 			break;
 

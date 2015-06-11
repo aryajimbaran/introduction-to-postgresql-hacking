@@ -3525,6 +3525,16 @@ _copyAlterSystemStmt(const AlterSystemStmt *from)
 	return newnode;
 }
 
+static ShutdownStmt *
+_copyShutdownStmt(const ShutdownStmt *from)
+{
+	ShutdownStmt *newnode = makeNode(ShutdownStmt);
+
+	COPY_STRING_FIELD(stype);
+
+	return newnode;
+}
+
 static CreateSeqStmt *
 _copyCreateSeqStmt(const CreateSeqStmt *from)
 {
@@ -4692,6 +4702,9 @@ copyObject(const void *from)
 			break;
 		case T_AlterSystemStmt:
 			retval = _copyAlterSystemStmt(from);
+			break;
+		case T_ShutdownStmt:
+			retval = _copyShutdownStmt(from);
 			break;
 		case T_CreateSeqStmt:
 			retval = _copyCreateSeqStmt(from);

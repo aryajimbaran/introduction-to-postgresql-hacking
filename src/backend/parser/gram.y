@@ -626,6 +626,7 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 
 	SAVEPOINT SCHEMA SCROLL SEARCH SECOND_P SECURITY SELECT SEQUENCE SEQUENCES
 	SERIALIZABLE SERVER SESSION SESSION_USER SET SETS SETOF SHARE SHOW
+	SHUTDOWN
 	SIMILAR SIMPLE SKIP SMALLINT SNAPSHOT SOME SQL_P STABLE STANDALONE_P START
 	STATEMENT STATISTICS STDIN STDOUT STORAGE STRICT_P STRIP_P SUBSTRING
 	SYMMETRIC SYSID SYSTEM_P
@@ -8909,6 +8910,18 @@ AlterSystemStmt:
 					n->setstmt = $4;
 					$$ = (Node *)n;
 				}
+			| ALTER SYSTEM_P SHUTDOWN
+				{
+					ShutdownStmt *n = makeNode(ShutdownStmt);
+					n->stype = NULL;
+					$$ = (Node *)n;
+				}
+			| ALTER SYSTEM_P SHUTDOWN ColId
+				{
+					ShutdownStmt *n = makeNode(ShutdownStmt);
+					n->stype = $4;
+					$$ = (Node *)n;
+				}
 		;
 
 
@@ -13788,6 +13801,7 @@ unreserved_keyword:
 			| SETS
 			| SHARE
 			| SHOW
+			| SHUTDOWN
 			| SIMPLE
 			| SKIP
 			| SNAPSHOT

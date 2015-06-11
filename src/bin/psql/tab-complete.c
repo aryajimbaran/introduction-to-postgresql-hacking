@@ -1369,12 +1369,12 @@ psql_completion(const char *text, int start, int end)
 
 		COMPLETE_WITH_LIST(list_ALTER_SERVER);
 	}
-	/* ALTER SYSTEM SET, RESET, RESET ALL */
+	/* ALTER SYSTEM SET, RESET, RESET ALL, SHUTDOWN */
 	else if (pg_strcasecmp(prev2_wd, "ALTER") == 0 &&
 			 pg_strcasecmp(prev_wd, "SYSTEM") == 0)
 	{
 		static const char *const list_ALTERSYSTEM[] =
-		{"SET", "RESET", NULL};
+		{"SET", "RESET", "SHUTDOWN", NULL};
 
 		COMPLETE_WITH_LIST(list_ALTERSYSTEM);
 	}
@@ -1392,6 +1392,16 @@ psql_completion(const char *text, int start, int end)
 		{"ALTER COLUMN", "OWNER TO", "RENAME TO", "SET SCHEMA", NULL};
 
 		COMPLETE_WITH_LIST(list_ALTERVIEW);
+	}
+	/* ALTER SYSTEM STUTDOWN <name> */
+	else if (pg_strcasecmp(prev4_wd, "ALTER") == 0 &&
+			 pg_strcasecmp(prev3_wd, "SYSTEM") == 0 &&
+			 pg_strcasecmp(prev2_wd, "SHUTDOWN") == 0)
+	{
+		static const char *const list_ALTERSYSTEMSHUTDOWN[] =
+		{"SMART", "FAST", "IMMEDIATE", NULL};
+
+		COMPLETE_WITH_LIST(list_ALTERSYSTEMSHUTDOWN);
 	}
 	/* ALTER MATERIALIZED VIEW <name> */
 	else if (pg_strcasecmp(prev4_wd, "ALTER") == 0 &&

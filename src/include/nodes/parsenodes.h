@@ -2745,6 +2745,16 @@ typedef struct AlterSystemStmt
 } AlterSystemStmt;
 
 /* ----------------------
+ *		Alter System Shutdown Statement
+ * ----------------------
+ */
+typedef struct ShutdownStmt
+{
+	NodeTag		type;
+	char	   *stype;
+} ShutdownStmt;
+
+/* ----------------------
  *		Cluster Statement (support pbrown's cluster index implementation)
  * ----------------------
  */
