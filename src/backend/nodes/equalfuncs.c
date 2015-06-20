@@ -1599,6 +1599,14 @@ _equalAlterSystemStmt(const AlterSystemStmt *a, const AlterSystemStmt *b)
 	return true;
 }
 
+static bool
+_equalShutdownStmt(const ShutdownStmt *a, const ShutdownStmt *b)
+{
+	COMPARE_STRING_FIELD(stype);
+
+	return true;
+}
+
 
 static bool
 _equalCreateSeqStmt(const CreateSeqStmt *a, const CreateSeqStmt *b)
@@ -3057,6 +3065,9 @@ equal(const void *a, const void *b)
 			break;
 		case T_AlterSystemStmt:
 			retval = _equalAlterSystemStmt(a, b);
+			break;
+		case T_ShutdownStmt:
+			retval = _equalShutdownStmt(a, b);
 			break;
 		case T_CreateSeqStmt:
 			retval = _equalCreateSeqStmt(a, b);
