@@ -1394,9 +1394,9 @@ psql_completion(const char *text, int start, int end)
 		COMPLETE_WITH_LIST(list_ALTERVIEW);
 	}
 	/* ALTER SYSTEM STUTDOWN <name> */
-	else if (pg_strcasecmp(prev4_wd, "ALTER") == 0 &&
-			 pg_strcasecmp(prev3_wd, "SYSTEM") == 0 &&
-			 pg_strcasecmp(prev2_wd, "SHUTDOWN") == 0)
+	else if (pg_strcasecmp(prev3_wd, "ALTER") == 0 &&
+			 pg_strcasecmp(prev2_wd, "SYSTEM") == 0 &&
+			 pg_strcasecmp(prev_wd, "SHUTDOWN") == 0)
 	{
 		static const char *const list_ALTERSYSTEMSHUTDOWN[] =
 		{"SMART", "FAST", "IMMEDIATE", NULL};
