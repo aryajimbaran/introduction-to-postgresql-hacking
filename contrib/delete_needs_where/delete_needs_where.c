@@ -26,15 +26,15 @@ static bool delete_needs_where_enabled = false;
 static void
 delete_needs_where_check(ParseState *pstate, Query *query)
 {
-	if (!delete_needs_where_enabled || query->commandType != CMD_DELETE)
-		return;
-
-	Assert(query->jointree != NULL);
-	if (query->jointree->quals == NULL)
-		ereport(ERROR,
-				(errcode(ERRCODE_CARDINALITY_VIOLATION),
-				 errmsg("DELETE requires a WHERE clause"),
-				 errhint("To delete all rows, use \"WHERE true\".")));
+	if (delete_needs_where_enabled && query->commandType == CMD_DELETE)
+	{
+		Assert(query->jointree != NULL);
+		if (query->jointree->quals == NULL)
+			ereport(ERROR,
+					(errcode(ERRCODE_CARDINALITY_VIOLATION),
+					 errmsg("DELETE requires a WHERE clause"),
+					 errhint("To delete all rows, use \"WHERE true\".")));
+	}
 
 	if (original_post_parse_analyze_hook != NULL)
 		(*original_post_parse_analyze_hook) (pstate, query);
